@@ -1,0 +1,19 @@
+# Note: This is a Node.js full-stack project, so dependencies are managed via package.json.
+# Run `npm install` inside the `frontend` and `backend` directories to install them.
+
+# Backend Core Dependencies:
+express
+mongoose
+socket.io
+cors
+dotenv
+
+# Frontend Core Dependencies:
+next
+react
+react-dom
+socket.io-client
+lucide-react
+tailwindcss
+autoprefixer
+postcss

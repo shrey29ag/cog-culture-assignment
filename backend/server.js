@@ -108,30 +108,26 @@ app.post('/api/track', async (req, res) => {
         const responseText = await generateMockLLMResponse(model, query, brandName);
         const { mentioned, sentiment } = parseLLMResponse(responseText, brandName);
 
-        if (mentioned) {
-          const trackRecord = new GeoTracking({
-            query,
-            brand: brandName,
-            model,
-            sentiment
-          });
-          
-          await trackRecord.save();
+        const trackRecord = new GeoTracking({
+          query,
+          brand: brandName,
+          model,
+          sentiment: mentioned ? sentiment : 'Neutral'
+        });
+        
+        await trackRecord.save();
 
-          // Emit real-time event to the client
-          io.emit('geo_update', {
-            query: trackRecord.query,
-            brand: trackRecord.brand,
-            model: trackRecord.model,
-            sentiment: trackRecord.sentiment,
-            timestamp: trackRecord.timestamp,
-            mockText: responseText // Sending actual text to display on dashboard
-          });
-          
-          console.log(`[${model}] Saved & emitted sentiment: ${sentiment} for brand: ${brandName}`);
-        } else {
-          console.log(`[${model}] Brand '${brandName}' was NOT mentioned.`);
-        }
+        // Emit real-time event to the client
+        io.emit('geo_update', {
+          query: trackRecord.query,
+          brand: trackRecord.brand,
+          model: trackRecord.model,
+          sentiment: trackRecord.sentiment,
+          timestamp: trackRecord.timestamp,
+          mockText: responseText // Sending actual text to display on dashboard
+        });
+        
+        console.log(`[${model}] Saved & emitted sentiment: ${trackRecord.sentiment} for brand: ${brandName}`);
       } catch (error) {
         console.error(`Error processing ${model}:`, error);
       }

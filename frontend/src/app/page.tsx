@@ -23,9 +23,9 @@ export default function Dashboard() {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    // Support Vercel's experimental route prefix in production
-    const socketUrl = process.env.NODE_ENV === 'production' ? "" : "http://localhost:4000";
-    const socketPath = process.env.NODE_ENV === 'production' ? "/_/backend/socket.io/" : "/socket.io";
+    // Connect to the Render backend in production, or localhost in development
+    const socketUrl = process.env.NODE_ENV === 'production' ? "https://geo-backend-8iod.onrender.com" : "http://localhost:4000";
+    const socketPath = "/socket.io";
 
     const newSocket = io(socketUrl, { path: socketPath });
 
@@ -57,7 +57,7 @@ export default function Dashboard() {
 
     try {
       const apiUrl = process.env.NODE_ENV === 'production' 
-        ? "/_/backend/api/track" 
+        ? "https://geo-backend-8iod.onrender.com/api/track" 
         : "http://localhost:4000/api/track";
 
       // Start the tracking process on the backend
